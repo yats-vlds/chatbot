@@ -1,21 +1,67 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, ScrollView, View} from 'react-native';
+import {Header} from "./src/components/Header"
+import {ChatBot} from "./src/components/ChatBot";
+import List from "./src/components/List";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+      <View contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={styles.scroll}>
+          {/*<Header/>*/}
+          <ChatBot />
+        </ScrollView>
+      </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1
   },
-});
+  scroll: {
+    flexGrow: 1,
+    backgroundColor: '#E5E5E5',
+  },
+  blockAnswerOnQuestion1: {
+    marginTop: 20,
+    alignItems: 'baseline',
+    height: 37,
+    backgroundColor: "#47A897",
+    borderRadius: 18.5,
+    marginLeft: "auto",
+    marginRight: 25,
+    marginBottom: 20
+  },
+  answerOnQuestion1: {
+    fontFamily: "Roboto",
+    fontWeight: "400",
+    fontStyle: "normal",
+    fontSize: 15,
+    textAlign: "center",
+    padding: 6,
+    paddingLeft: 10,
+    paddingRight: 10,
+    color: "#ffffff"
+  },
+  questionSection: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    marginLeft: 25
+  },
+  questionIcon: {
+    width: 44.57,
+    height: 43.02
+  },
+  questionMessage: {
+    fontFamily: "Roboto",
+    fontStyle: "normal",
+    fontWeight: "normal",
+    fontSize: 15,
+    textAlign: "center",
+    color: "#666666",
+    marginLeft: 20
+  }
+})
