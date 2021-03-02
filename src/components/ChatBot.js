@@ -4,20 +4,17 @@ import {
     Image,
     Text,
     StyleSheet,
-    ScrollView,
-    TextInput,
-    Button,
-    TouchableOpacity,
     LogBox,
-    YellowBox
+    YellowBox,
+    Button
 } from "react-native"
-import RadioButtonRN from 'radio-buttons-react-native'
-import Icon from "react-native-vector-icons/FontAwesome"
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import IconAntDesign from "react-native-vector-icons/AntDesign";
-import {launchImageLibrary} from "react-native-image-picker";
-import _ from "lodash";
-import SelectMultiple from "react-native-select-multiple";
+import DateTimePickerModal from "react-native-modal-datetime-picker"
+import IconAntDesign from "react-native-vector-icons/AntDesign"
+import {launchImageLibrary} from "react-native-image-picker"
+import _ from "lodash"
+import SelectMultiple from "react-native-select-multiple"
+import {TextInput} from "react-native"
+import {TouchableOpacity} from "react-native"
 
 const styles = StyleSheet.create({
     chatBot: {
@@ -150,8 +147,8 @@ const options = {
 const answerOneDatas = ['Apples', 'Oranges', 'Pears']
 
 export const ChatBot = () => {
-
     const [oneAnswer, setOneAnswer] = useState([])
+    const [threeAnswer, setThreeAnswer] = useState([])
     console.disableYellowBox = true;
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -167,11 +164,15 @@ export const ChatBot = () => {
         // selectedFruits is array of { label, value }
         setOneAnswer(selectedFruits)
     }
+
+    const answerThreeChange = (selectedFruits) => {
+        // selectedFruits is array of { label, value }
+        setThreeAnswer(selectedFruits)
+    }
     console.log(oneAnswer)
 
-    const [answerOnQuestion1, setAnswerOnQuestion1] = useState(null)
     const [answerOnQuestion2, setAnswerOnQuestion2] = useState(null)
-    const [answerOnQuestion3, setAnswerOnQuestion3] = useState(null)
+    const [answerOnQuestion3, setAnswerOnQuestion3] = useState('')
     const [answerOnQuestion5, setAnswerOnQuestion5] = useState(null)
     const [date, setDate] = useState(null)
     const [answerOnQuestion2Blur, setAnswerOnQuestion2Blur] = useState(false)
@@ -179,8 +180,6 @@ export const ChatBot = () => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [avatarSource, setAvatarSource] = useState(null)
     const [pic, setPic] = useState(null)
-    console.log(avatarSource)
-    console.log(pic)
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -244,171 +243,150 @@ export const ChatBot = () => {
                 </View>
             </View>
             {oneAnswer.length < 2 ? (
-                // <RadioButtonRN
-                //     data={data}
-                //     selectedBtn={(e) => setAnswerOnQuestion1(e.value)}
-                //     boxDeactiveBgColor={"#E5E5E5"}
-                //     boxActiveBgColor={"#C2DEEA"}
-                //     circleSize={8}
-                //     deactiveColor={"gray"}
-                //     duration={100}
-                //     icon={
-                //         <Icon
-                //             name="circle-thin"
-                //             size={16}
-                //             color="#2c9dd1"
-                //         />
-                //     }
-                // />
-                    <View>
-                        <SelectMultiple
-                            items={answerOneData}
-                            selectedItems={oneAnswer}
-                            onSelectionsChange={answerOneChange}/>
-                    </View>
-                ) : (
+                <View style={{marginTop: "5%"}}>
+                    <SelectMultiple
+                        items={answerOneData}
+                        selectedItems={oneAnswer}
+                        onSelectionsChange={answerOneChange}
+                        selectedRowStyle={{backgroundColor: "#C2DEEA"}}
+                        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}
+                        checkboxStyle={{backgroundColor: "#ECDFCF"}}
+                        selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}
+                    />
+                </View>
+            ) : (
                 <>
-                    {/*<View style={styles.blockAnswerOnQuestion1}>*/}
-                    {/*    <Text style={styles.answerOnQuestion1}>{answerOnQuestion1}</Text>*/}
-                    {/*</View>*/}
-                    {/*<View style={styles.questionSection2}>*/}
-                    {/*    <Image*/}
-                    {/*        source={require("../assets/iconProfile.png")}*/}
-                    {/*        style={styles.questionIcon}*/}
-                    {/*    />*/}
-                    {/*    <Text style={styles.questionMessage}>To start, I`ll need you home address</Text>*/}
-                    {/*</View>*/}
+                    <View style={styles.blockAnswerOnQuestion1}>
+                        <Text style={styles.answerOnQuestion1}>AnswerOne</Text>
+                    </View>
+                    <View style={styles.questionSection2}>
+                        <Image
+                            source={require("../assets/iconProfile.png")}
+                            style={styles.questionIcon}
+                        />
+                        <Text style={styles.questionMessage}>To start, I`ll need you home address</Text>
+                    </View>
                 </>
             )}
-            {/*{!answerOnQuestion2Blur && answerOnQuestion1 && (<TextInput*/}
-            {/*    style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}*/}
-            {/*    onChangeText={text => setAnswerOnQuestion2(text)}*/}
-            {/*    value={answerOnQuestion2}*/}
-            {/*    onBlur={() => setAnswerOnQuestion2Blur(true)}*/}
-            {/*    placeholderTextColor={"gray"}*/}
-            {/*    placeholder={"Text"}*/}
-            {/*/>)}*/}
-            {/*{answerOnQuestion2Blur && (*/}
-            {/*    <>*/}
-            {/*        <View style={styles.blockAnswerOnQuestion1}>*/}
-            {/*            <Text style={styles.answerOnQuestion1}>{answerOnQuestion2 || ""}</Text>*/}
-            {/*        </View>*/}
-            {/*        <View style={styles.questionSection2}>*/}
-            {/*            <Image*/}
-            {/*                source={require("../assets/iconProfile.png")}*/}
-            {/*                style={styles.questionIcon}*/}
-            {/*            />*/}
-            {/*            <Text style={styles.questionMessage}>Сhoose two cool options</Text>*/}
-            {/*        </View>*/}
-            {/*    </>*/}
-            {/*)}*/}
-            {/*{answerOnQuestion2 && !answerOnQuestion3 && (*/}
-            {/*    <RadioButtonRN*/}
-            {/*        data={data3}*/}
-            {/*        selectedBtn={(e) => setAnswerOnQuestion3(e.value)}*/}
-            {/*        boxDeactiveBgColor={"#E5E5E5"}*/}
-            {/*        boxActiveBgColor={"#C2DEEA"}*/}
-            {/*        circleSize={8}*/}
-            {/*        deactiveColor={"gray"}*/}
-            {/*        duration={100}*/}
-            {/*        icon={*/}
-            {/*            <Icon*/}
-            {/*                name="circle-thin"*/}
-            {/*                size={16}*/}
-            {/*                color="#2c9dd1"*/}
-            {/*            />*/}
-            {/*        }*/}
-            {/*    />)}*/}
-            {/*{answerOnQuestion3 && (*/}
-            {/*    <>*/}
-            {/*        <View style={styles.blockAnswerOnQuestion1}>*/}
-            {/*            <Text style={styles.answerOnQuestion1}>{answerOnQuestion3 || ""}</Text>*/}
-            {/*        </View>*/}
-            {/*        <View style={styles.questionSection2}>*/}
-            {/*            <Image*/}
-            {/*                source={require("../assets/iconProfile.png")}*/}
-            {/*                style={styles.questionIcon}*/}
-            {/*            />*/}
-            {/*            <Text style={styles.questionMessage}>When your birthday?</Text>*/}
-            {/*        </View>*/}
-            {/*    </>*/}
-            {/*)}*/}
-            {/*{answerOnQuestion3 && !date && (*/}
-            {/*    <View style={{marginTop: 50}}>*/}
-            {/*        <Button title="Show Date Picker" onPress={showDatePicker}/>*/}
-            {/*        <DateTimePickerModal*/}
-            {/*            isVisible={isDatePickerVisible}*/}
-            {/*            mode="date"*/}
-            {/*            onConfirm={handleConfirm}*/}
-            {/*            onCancel={hideDatePicker}*/}
-            {/*        />*/}
-            {/*    </View>*/}
-            {/*)}*/}
-            {/*{date && (<>*/}
-            {/*    <View style={styles.blockAnswerOnQuestion1}>*/}
-            {/*        <Text style={styles.answerOnQuestion1}>{date.toString().slice(4, 16) || ""}</Text>*/}
-            {/*    </View>*/}
-            {/*    <View style={styles.questionSection2}>*/}
-            {/*        <Image*/}
-            {/*            source={require("../assets/iconProfile.png")}*/}
-            {/*            style={styles.questionIcon}*/}
-            {/*        />*/}
-            {/*        <Text style={styles.questionMessage}>Whats is your social security number?</Text>*/}
-            {/*    </View>*/}
-            {/*</>)*/}
-            {/*}*/}
-            {/*{!answerOnQuestion5Blur && date && (<TextInput*/}
-            {/*    style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}*/}
-            {/*    onChangeText={text => setAnswerOnQuestion5(text)}*/}
-            {/*    value={answerOnQuestion5}*/}
-            {/*    onBlur={() => setAnswerOnQuestion5Blur(true)}*/}
-            {/*    placeholderTextColor={"gray"}*/}
-            {/*    placeholder={"Text"}*/}
-            {/*/>)}*/}
-            {/*{answerOnQuestion5Blur && answerOnQuestion5 && (*/}
-            {/*    <>*/}
-            {/*        <View style={styles.blockAnswerOnQuestion1}>*/}
-            {/*            <Text style={styles.answerOnQuestion1}>{answerOnQuestion5 || ""}</Text>*/}
-            {/*        </View>*/}
-            {/*        <View style={styles.questionSection2}>*/}
-            {/*            <Image*/}
-            {/*                source={require("../assets/iconProfile.png")}*/}
-            {/*                style={styles.questionIcon}*/}
-            {/*            />*/}
-            {/*            <Text style={styles.questionMessage}>Please attach your photo file</Text>*/}
-            {/*        </View>*/}
-            {/*    </>*/}
-            {/*)}*/}
-            {/*{!avatarSource && answerOnQuestion5Blur && answerOnQuestion5 && (*/}
-            {/*    <View>*/}
-            {/*        <TouchableOpacity style={{marginTop: 50, justifyContent: "center", alignItems:"center"}}*/}
-            {/*                          onPress={myfun}>*/}
-            {/*            <IconAntDesign name="upload" size={35} color="#A0A0A0"/>*/}
-            {/*        </TouchableOpacity>*/}
-            {/*    </View>*/}
-            {/*)}*/}
-            {/*{*/}
-            {/*    answerOnQuestion5Blur && answerOnQuestion5 && avatarSource &&(*/}
-            {/*        <View style={{marginBottom: 20}}>*/}
-            {/*            <Image source={avatarSource}*/}
-            {/*                   style={{*/}
-            {/*                       width: 86,*/}
-            {/*                       height: 74,*/}
-            {/*                       marginLeft: "auto",*/}
-            {/*                       marginRight: 25,*/}
-            {/*                       marginTop: 15,*/}
-            {/*                       marginBottom: 15*/}
-            {/*                   }}/>*/}
-            {/*            <View style={styles.questionSection2}>*/}
-            {/*                <Image*/}
-            {/*                    source={require("../assets/iconProfile.png")}*/}
-            {/*                    style={styles.questionIcon}*/}
-            {/*                />*/}
-            {/*                <Text style={styles.questionMessage}>Thank you, mister! Good job!*/}
-            {/*                </Text>*/}
-            {/*            </View>*/}
-            {/*        </View>*/}
-            {/*    )}*/}
+            {!answerOnQuestion2Blur && oneAnswer.length === 2 && (<TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}
+                onChangeText={text => setAnswerOnQuestion2(text)}
+                value={answerOnQuestion2}
+                onBlur={() => setAnswerOnQuestion2Blur(true)}
+                placeholderTextColor={"gray"}
+                placeholder={"Text"}
+            />)}
+            {answerOnQuestion2Blur && (
+                <>
+                    <View style={styles.blockAnswerOnQuestion1}>
+                        <Text style={styles.answerOnQuestion1}>answerTwo</Text>
+                    </View>
+                    <View style={styles.questionSection2}>
+                        <Image
+                            source={require("../assets/iconProfile.png")}
+                            style={styles.questionIcon}
+                        />
+                        <Text style={styles.questionMessage}>Сhoose two cool options</Text>
+                    </View>
+                </>
+            )}
+            {answerOnQuestion2 && threeAnswer.length < 2 && (
+                <View>
+                    <SelectMultiple
+                        items={answerOneData}
+                        selectedItems={threeAnswer}
+                        onSelectionsChange={answerThreeChange}
+                    />
+                </View>
+            )}
+            {threeAnswer.length === 2 && (
+                <>
+                    <View style={styles.blockAnswerOnQuestion1}>
+                        <Text style={styles.answerOnQuestion1}>{answerOnQuestion3 || ""}</Text>
+                    </View>
+                    <View style={styles.questionSection2}>
+                        <Image
+                            source={require("../assets/iconProfile.png")}
+                            style={styles.questionIcon}
+                        />
+                        <Text style={styles.questionMessage}>When your birthday?</Text>
+                    </View>
+                </>
+            )}
+            {threeAnswer.length === 2 && !date && (
+                <View style={{marginTop: 50}}>
+                    <DateTimePickerModal
+                        isVisible={true}
+                        mode="date"
+                        onConfirm={handleConfirm}
+                        onCancel={hideDatePicker}
+                    />
+                </View>
+            )}
+            {date && (<>
+                <View style={styles.blockAnswerOnQuestion1}>
+                    <Text style={styles.answerOnQuestion1}>{date.toString().slice(4, 16) || ""}</Text>
+                </View>
+                <View style={styles.questionSection2}>
+                    <Image
+                        source={require("../assets/iconProfile.png")}
+                        style={styles.questionIcon}
+                    />
+                    <Text style={styles.questionMessage}>Whats is your social security number?</Text>
+                </View>
+            </>)
+            }
+            {!answerOnQuestion5Blur && date && (<TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}
+                onChangeText={text => setAnswerOnQuestion5(text)}
+                value={answerOnQuestion5}
+                onBlur={() => setAnswerOnQuestion5Blur(true)}
+                placeholderTextColor={"gray"}
+                placeholder={"Text"}
+            />)}
+            {answerOnQuestion5Blur && answerOnQuestion5 && (
+                <>
+                    <View style={styles.blockAnswerOnQuestion1}>
+                        <Text style={styles.answerOnQuestion1}>{answerOnQuestion5 || ""}</Text>
+                    </View>
+                    <View style={styles.questionSection2}>
+                        <Image
+                            source={require("../assets/iconProfile.png")}
+                            style={styles.questionIcon}
+                        />
+                        <Text style={styles.questionMessage}>Please attach your photo file</Text>
+                    </View>
+                </>
+            )}
+            {!avatarSource && answerOnQuestion5Blur && answerOnQuestion5 && (
+                <View>
+                    <TouchableOpacity style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}
+                                      onPress={myfun}>
+                        <IconAntDesign name="upload" size={35} color="#A0A0A0"/>
+                    </TouchableOpacity>
+                </View>
+            )}
+            {answerOnQuestion5Blur && answerOnQuestion5 && avatarSource && (
+                <View style={{marginBottom: 20}}>
+                    <Image source={avatarSource}
+                           style={{
+                               width: 86,
+                               height: 74,
+                               marginLeft: "auto",
+                               marginRight: 25,
+                               marginTop: 15,
+                               marginBottom: 15
+                           }}/>
+                    <View style={styles.questionSection2}>
+                        <Image
+                            source={require("../assets/iconProfile.png")}
+                            style={styles.questionIcon}
+                        />
+                        <Text style={styles.questionMessage}>Thank you, mister! Good job!
+                        </Text>
+                    </View>
+                </View>
+            )}
         </>
     )
 }

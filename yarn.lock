@@ -2066,7 +2066,7 @@
     "sudo-prompt" "^9.0.0"
     "wcwidth" "^1.0.1"
 
-"@react-native-community/datetimepicker@^3.0.2", "@react-native-community/datetimepicker@>=3.0.0":
+"@react-native-community/datetimepicker@^3.0.2", "@react-native-community/datetimepicker@^3.0.9", "@react-native-community/datetimepicker@>=3.0.0":
   "integrity" "sha512-8Hel5K2xQNJsGQleUT5fheO60aO0/KhP9nkbDzfGgv3Cdckrf2xWQs0JK3xUhuDoUztpMZS45jqE2WPS7fBdgA=="
   "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-3.0.9.tgz"
   "version" "3.0.9"

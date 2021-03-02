@@ -3,6 +3,7 @@ import {StyleSheet, ScrollView, View} from 'react-native';
 import {Header} from "./src/components/Header"
 import {ChatBot} from "./src/components/ChatBot";
 import List from "./src/components/List";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export default function App() {
   return (
