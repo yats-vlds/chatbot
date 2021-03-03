@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "key": "Mango",
+    "checked": false
+  },
+  {
+    "id": 1,
+    "key": "Banana",
+    "checked": false
+  },
+  {
+    "id": 2,
+    "key": "Papaya",
+    "checked": false
+  },
+  {
+    "id": 3,
+    "key": "Grapes",
+    "checked": false
+  },
+  {
+    "id": 4,
+    "key": "Guava",
+    "checked": false
+  },
+  {
+    "id": 5,
+    "key": "Lychee",
+    "checked": false
+  }
+]
