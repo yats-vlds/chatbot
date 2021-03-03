@@ -16,7 +16,7 @@ export const Header = () => {
                 </Text>
             </View>
             <View style={styles.rightHeader}>
-                <IconSimpleLineIcons name="refresh" size={25} color="#252525"/>
+                <IconSimpleLineIcons name="refresh" size={25} color="#252525" style={{transform: [{rotate: "90deg"}]}}/>
                 <Text style={styles.subtitleIcon}>refresh</Text>
             </View>
         </View>

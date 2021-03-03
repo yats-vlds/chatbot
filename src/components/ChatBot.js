@@ -15,7 +15,6 @@ import _ from "lodash"
 import SelectMultiple from "react-native-select-multiple"
 import {TextInput} from "react-native"
 import {TouchableOpacity} from "react-native"
-import Icon from "react-native-vector-icons/FontAwesome";
 import RadioButtonRN from "radio-buttons-react-native";
 
 const styles = StyleSheet.create({
@@ -252,7 +251,11 @@ export const ChatBot = () => {
             setFilePath(response);
         });
     };
-
+    let transformationValue = (threeAnswer) => {
+        const arr = ['I have']
+        threeAnswer.forEach(el => arr.push(el.value))
+        return arr.join(' ')
+    }
 
     return (
         <>
@@ -330,7 +333,7 @@ export const ChatBot = () => {
             {answerOnQuestion2Blur && (
                 <>
                     <View style={styles.blockAnswerOnQuestion1}>
-                        <Text style={styles.answerOnQuestion1}>answerTwo</Text>
+                        <Text style={styles.answerOnQuestion1}>{answerOnQuestion2 || ""}</Text>
                     </View>
                     <View style={styles.questionSection2}>
                         <Image
@@ -358,7 +361,7 @@ export const ChatBot = () => {
             {threeAnswer.length === 2 && (
                 <>
                     <View style={styles.blockAnswerOnQuestion1}>
-                        <Text style={styles.answerOnQuestion1}>{answerOnQuestion3 || ""}</Text>
+                        <Text style={styles.answerOnQuestion1}>{transformationValue(threeAnswer)}</Text>
                     </View>
                     <View style={styles.questionSection2}>
                         <Image
@@ -371,8 +374,9 @@ export const ChatBot = () => {
             )}
             {threeAnswer.length === 2 && !date && (
                 <View style={{marginTop: 50}}>
+                    <Button title="Show Date Picker" onPress={showDatePicker} />
                     <DateTimePickerModal
-                        isVisible={true}
+                        isVisible={isDatePickerVisible}
                         mode="date"
                         onConfirm={handleConfirm}
                         onCancel={hideDatePicker}
@@ -414,7 +418,7 @@ export const ChatBot = () => {
                     </View>
                 </>
             )}
-            {!avatarSource && answerOnQuestion5Blur && answerOnQuestion5 && (
+            {!filePath.uri && answerOnQuestion5Blur && answerOnQuestion5 && (
                 <View>
                     <TouchableOpacity
                         style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}

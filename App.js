@@ -9,7 +9,7 @@ export default function App() {
   return (
       <View contentContainerStyle={styles.container}>
         <ScrollView contentContainerStyle={styles.scroll}>
-          {/*<Header/>*/}
+          <Header/>
           <ChatBot />
         </ScrollView>
       </View>
