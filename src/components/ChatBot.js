@@ -15,6 +15,8 @@ import _ from "lodash"
 import SelectMultiple from "react-native-select-multiple"
 import {TextInput} from "react-native"
 import {TouchableOpacity} from "react-native"
+import Icon from "react-native-vector-icons/FontAwesome";
+import RadioButtonRN from "radio-buttons-react-native";
 
 const styles = StyleSheet.create({
     chatBot: {
@@ -169,8 +171,8 @@ export const ChatBot = () => {
         // selectedFruits is array of { label, value }
         setThreeAnswer(selectedFruits)
     }
-    console.log(oneAnswer)
 
+    const [answerOnQuestion1, setAnswerOnQuestion1] = useState(null)
     const [answerOnQuestion2, setAnswerOnQuestion2] = useState(null)
     const [answerOnQuestion3, setAnswerOnQuestion3] = useState('')
     const [answerOnQuestion5, setAnswerOnQuestion5] = useState(null)
@@ -215,6 +217,42 @@ export const ChatBot = () => {
             }
         });
     }
+    const [filePath, setFilePath] = useState({});
+
+    const chooseFile = (type) => {
+        let options = {
+            mediaType: type,
+            maxWidth: 300,
+            maxHeight: 550,
+            quality: 1,
+        };
+        launchImageLibrary(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                alert('User cancelled camera picker');
+                return;
+            } else if (response.errorCode == 'camera_unavailable') {
+                alert('Camera not available on device');
+                return;
+            } else if (response.errorCode == 'permission') {
+                alert('Permission not satisfied');
+                return;
+            } else if (response.errorCode == 'others') {
+                alert(response.errorMessage);
+                return;
+            }
+            console.log('base64 -> ', response.base64);
+            console.log('uri -> ', response.uri);
+            console.log('width -> ', response.width);
+            console.log('height -> ', response.height);
+            console.log('fileSize -> ', response.fileSize);
+            console.log('type -> ', response.type);
+            console.log('fileName -> ', response.fileName);
+            setFilePath(response);
+        });
+    };
+
 
     return (
         <>
@@ -242,22 +280,34 @@ export const ChatBot = () => {
                     <Text style={styles.questionMessage}>What do you love more than anything?</Text>
                 </View>
             </View>
-            {oneAnswer.length < 2 ? (
-                <View style={{marginTop: "5%"}}>
-                    <SelectMultiple
-                        items={answerOneData}
-                        selectedItems={oneAnswer}
-                        onSelectionsChange={answerOneChange}
-                        selectedRowStyle={{backgroundColor: "#C2DEEA"}}
-                        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}
-                        checkboxStyle={{backgroundColor: "#ECDFCF"}}
-                        selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}
+            {!answerOnQuestion1 ? (
+                <View style={{marginTop: "3%"}}>
+                    <RadioButtonRN
+                        data={data3}
+                        selectedBtn={(e) => setAnswerOnQuestion1(e.value)}
+                        boxDeactiveBgColor={"#E5E5E5"}
+                        boxActiveBgColor={"#C2DEEA"}
+                        circleSize={6}
+                        deactiveColor={"#EDBDCD"}
+                        duration={100}
+                        boxStyle={{ marginBottom: -10.5, borderWidth: 0, borderRadius: 0}}
                     />
+                {/*</View>*/}
+                {/*    <SelectMultiple*/}
+                {/*        items={answerOneData}*/}
+                {/*        selectedItems={oneAnswer}*/}
+                {/*        onSelectionsChange={answerOneChange}*/}
+                {/*        selectedRowStyle={{backgroundColor: "#C2DEEA"}}*/}
+                {/*        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}*/}
+                {/*        checkboxStyle={{backgroundColor: "#ECDFCF"}}*/}
+                {/*        selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}*/}
+                {/*    />*/}
+                {/*</View>*/}
                 </View>
             ) : (
                 <>
                     <View style={styles.blockAnswerOnQuestion1}>
-                        <Text style={styles.answerOnQuestion1}>AnswerOne</Text>
+                        <Text style={styles.answerOnQuestion1}>{answerOnQuestion1}</Text>
                     </View>
                     <View style={styles.questionSection2}>
                         <Image
@@ -268,13 +318,14 @@ export const ChatBot = () => {
                     </View>
                 </>
             )}
-            {!answerOnQuestion2Blur && oneAnswer.length === 2 && (<TextInput
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}
+            {!answerOnQuestion2Blur && answerOnQuestion1 && (<TextInput
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20, padding: 5, marginBottom: 10}}
                 onChangeText={text => setAnswerOnQuestion2(text)}
                 value={answerOnQuestion2}
                 onBlur={() => setAnswerOnQuestion2Blur(true)}
                 placeholderTextColor={"gray"}
-                placeholder={"Text"}
+                placeholder={"TEXT"}
+                autoFocus={true}
             />)}
             {answerOnQuestion2Blur && (
                 <>
@@ -296,6 +347,11 @@ export const ChatBot = () => {
                         items={answerOneData}
                         selectedItems={threeAnswer}
                         onSelectionsChange={answerThreeChange}
+
+                        selectedRowStyle={{backgroundColor: "#C2DEEA"}}
+                        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}
+                        checkboxStyle={{backgroundColor: "#ECDFCF"}}
+                        selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}
                     />
                 </View>
             )}
@@ -360,15 +416,17 @@ export const ChatBot = () => {
             )}
             {!avatarSource && answerOnQuestion5Blur && answerOnQuestion5 && (
                 <View>
-                    <TouchableOpacity style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}
-                                      onPress={myfun}>
+                    <TouchableOpacity
+                        style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}
+                        activeOpacity={0.5}
+                        onPress={() => chooseFile('photo')}>
                         <IconAntDesign name="upload" size={35} color="#A0A0A0"/>
                     </TouchableOpacity>
                 </View>
             )}
-            {answerOnQuestion5Blur && answerOnQuestion5 && avatarSource && (
+            {answerOnQuestion5Blur && answerOnQuestion5 && filePath.uri && (
                 <View style={{marginBottom: 20}}>
-                    <Image source={avatarSource}
+                    <Image source={{uri: filePath.uri}}
                            style={{
                                width: 86,
                                height: 74,
