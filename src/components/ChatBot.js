@@ -16,15 +16,17 @@ import SelectMultiple from "react-native-select-multiple"
 import {TextInput} from "react-native"
 import {TouchableOpacity} from "react-native"
 import RadioButtonRN from "radio-buttons-react-native";
+import {Header} from "./Header"
+
 
 const styles = StyleSheet.create({
     chatBot: {
         flex: 1,
-        alignItems: "center"
+        alignItems: "center",
     },
     iconProfile: {
-        marginTop: 200,
-        marginBottom: 16,
+        marginTop: "30%",
+        marginBottom: "5%",
         width: 125,
         height: 121
     },
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
         fontFamily: "Roboto",
         fontWeight: "400",
         fontStyle: "normal",
-        fontSize: 15,
+        fontSize: 14,
         textAlign: "center",
         padding: 6,
         paddingLeft: 10,
@@ -110,6 +112,7 @@ const styles = StyleSheet.create({
         color: "#ffffff"
     }
 })
+
 const answerOneData = [
     {
         label: 'STEAK',
@@ -140,16 +143,8 @@ const data3 = [
     }
 ];
 
-const options = {
-    title: 'my pic app',
-    takePhotoButtonTitle: 'Take photo with your camera',
-    chooseFromLibraryButtonTitle: 'Choose photo from library',
-}
-const answerOneDatas = ['Apples', 'Oranges', 'Pears']
 
 export const ChatBot = () => {
-    const [oneAnswer, setOneAnswer] = useState([])
-    const [threeAnswer, setThreeAnswer] = useState([])
     console.disableYellowBox = true;
     LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
@@ -161,26 +156,16 @@ export const ChatBot = () => {
             _console.warn(message);
         }
     };
-    const answerOneChange = (selectedFruits) => {
-        // selectedFruits is array of { label, value }
-        setOneAnswer(selectedFruits)
-    }
-
-    const answerThreeChange = (selectedFruits) => {
-        // selectedFruits is array of { label, value }
-        setThreeAnswer(selectedFruits)
-    }
 
     const [answerOnQuestion1, setAnswerOnQuestion1] = useState(null)
+    const [threeAnswer, setThreeAnswer] = useState([])
     const [answerOnQuestion2, setAnswerOnQuestion2] = useState(null)
-    const [answerOnQuestion3, setAnswerOnQuestion3] = useState('')
     const [answerOnQuestion5, setAnswerOnQuestion5] = useState(null)
     const [date, setDate] = useState(null)
     const [answerOnQuestion2Blur, setAnswerOnQuestion2Blur] = useState(false)
     const [answerOnQuestion5Blur, setAnswerOnQuestion5Blur] = useState(false)
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [avatarSource, setAvatarSource] = useState(null)
-    const [pic, setPic] = useState(null)
+    const [filePath, setFilePath] = useState({});
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -194,29 +179,22 @@ export const ChatBot = () => {
         setDate(date)
         hideDatePicker();
     };
-
-
-    const myfun = () => {
-        //alert('clicked');
-
-        launchImageLibrary(options, (response) => {
-            console.log('Response = ', response);
-
-            if (response.didCancel) {
-                console.log('User cancelled image picker');
-            } else if (response.error) {
-                console.log('Image Picker Error: ', response.error);
-            } else {
-                let source = {uri: response.uri};
-
-                // You can also display the image using data:
-                // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-                setAvatarSource(source)
-                setPic(response.data)
-            }
-        });
+    const answerThreeChange = (selectedFruits) => {
+        // selectedFruits is array of { label, value }
+        setThreeAnswer(selectedFruits)
     }
-    const [filePath, setFilePath] = useState({});
+    const refreshHandler = () => {
+        setAnswerOnQuestion1(null)
+        setThreeAnswer([])
+        setAnswerOnQuestion2(null)
+        setAnswerOnQuestion5(null)
+        setDate(null)
+        setAnswerOnQuestion2Blur(false)
+        setAnswerOnQuestion5Blur(false)
+        setDatePickerVisibility(false);
+        setFilePath({})
+    }
+
 
     const chooseFile = (type) => {
         let options = {
@@ -258,7 +236,8 @@ export const ChatBot = () => {
     }
 
     return (
-        <>
+        <View style={{flex: 1}}>
+            <Header refreshHandler={refreshHandler}/>
             <View style={styles.chatBot}>
                 <Image
                     source={require("../assets/iconProfile.png")}
@@ -284,7 +263,7 @@ export const ChatBot = () => {
                 </View>
             </View>
             {!answerOnQuestion1 ? (
-                <View style={{marginTop: "3%"}}>
+                <View style={{marginBottom: "15%"}}>
                     <RadioButtonRN
                         data={data3}
                         selectedBtn={(e) => setAnswerOnQuestion1(e.value)}
@@ -292,20 +271,8 @@ export const ChatBot = () => {
                         boxActiveBgColor={"#C2DEEA"}
                         circleSize={6}
                         deactiveColor={"#EDBDCD"}
-                        duration={100}
-                        boxStyle={{ marginBottom: -10.5, borderWidth: 0, borderRadius: 0}}
+                        boxStyle={{borderWidth: 0, borderRadius: 0}}
                     />
-                {/*</View>*/}
-                {/*    <SelectMultiple*/}
-                {/*        items={answerOneData}*/}
-                {/*        selectedItems={oneAnswer}*/}
-                {/*        onSelectionsChange={answerOneChange}*/}
-                {/*        selectedRowStyle={{backgroundColor: "#C2DEEA"}}*/}
-                {/*        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}*/}
-                {/*        checkboxStyle={{backgroundColor: "#ECDFCF"}}*/}
-                {/*        selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}*/}
-                {/*    />*/}
-                {/*</View>*/}
                 </View>
             ) : (
                 <>
@@ -322,7 +289,7 @@ export const ChatBot = () => {
                 </>
             )}
             {!answerOnQuestion2Blur && answerOnQuestion1 && (<TextInput
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20, padding: 5, marginBottom: 10}}
+                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: "5%", padding: 5, marginBottom: 10}}
                 onChangeText={text => setAnswerOnQuestion2(text)}
                 value={answerOnQuestion2}
                 onBlur={() => setAnswerOnQuestion2Blur(true)}
@@ -344,7 +311,7 @@ export const ChatBot = () => {
                     </View>
                 </>
             )}
-            {answerOnQuestion2 && threeAnswer.length < 2 && (
+            {answerOnQuestion2Blur && threeAnswer.length < 2 && (
                 <View>
                     <SelectMultiple
                         items={answerOneData}
@@ -355,6 +322,7 @@ export const ChatBot = () => {
                         rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}
                         checkboxStyle={{backgroundColor: "#ECDFCF"}}
                         selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}
+                        style={{marginTop: "5%"}}
                     />
                 </View>
             )}
@@ -373,7 +341,7 @@ export const ChatBot = () => {
                 </>
             )}
             {threeAnswer.length === 2 && !date && (
-                <View style={{marginTop: 50}}>
+                <View style={{marginTop: "5%"}}>
                     <Button title="Show Date Picker" onPress={showDatePicker} />
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
@@ -402,7 +370,7 @@ export const ChatBot = () => {
                 value={answerOnQuestion5}
                 onBlur={() => setAnswerOnQuestion5Blur(true)}
                 placeholderTextColor={"gray"}
-                placeholder={"Text"}
+                placeholder={"Number"}
             />)}
             {answerOnQuestion5Blur && answerOnQuestion5 && (
                 <>
@@ -449,6 +417,6 @@ export const ChatBot = () => {
                     </View>
                 </View>
             )}
-        </>
+        </View>
     )
 }
