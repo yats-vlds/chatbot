@@ -17,7 +17,7 @@ import {TextInput} from "react-native"
 import {TouchableOpacity} from "react-native"
 import RadioButtonRN from "radio-buttons-react-native";
 import {Header} from "./Header"
-
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const styles = StyleSheet.create({
     chatBot: {
@@ -159,6 +159,7 @@ export const ChatBot = () => {
 
     const [answerOnQuestion1, setAnswerOnQuestion1] = useState(null)
     const [threeAnswer, setThreeAnswer] = useState([])
+    const [isThreeAnswer, setIsThreeAnswer] = useState(false)
     const [answerOnQuestion2, setAnswerOnQuestion2] = useState(null)
     const [answerOnQuestion5, setAnswerOnQuestion5] = useState(null)
     const [date, setDate] = useState(null)
@@ -183,6 +184,14 @@ export const ChatBot = () => {
         // selectedFruits is array of { label, value }
         setThreeAnswer(selectedFruits)
     }
+
+    const onAddItem = () => {
+        if (threeAnswer.length === 2) {
+            setTimeout(() => {
+                setIsThreeAnswer(true)
+            }, 200)
+        }
+    }
     const refreshHandler = () => {
         setAnswerOnQuestion1(null)
         setThreeAnswer([])
@@ -193,6 +202,7 @@ export const ChatBot = () => {
         setAnswerOnQuestion5Blur(false)
         setDatePickerVisibility(false);
         setFilePath({})
+        setIsThreeAnswer(false)
     }
 
 
@@ -230,9 +240,9 @@ export const ChatBot = () => {
         });
     };
     let transformationValue = (threeAnswer) => {
-        const arr = ['I have']
+        const arr = ['I have ']
         threeAnswer.forEach(el => arr.push(el.value))
-        return arr.join(' ')
+        return arr.join(', ')
     }
 
     return (
@@ -263,15 +273,19 @@ export const ChatBot = () => {
                 </View>
             </View>
             {!answerOnQuestion1 ? (
-                <View style={{marginBottom: "15%"}}>
+                <View style={{marginBottom: "5%", marginTop: "5%"}}>
                     <RadioButtonRN
                         data={data3}
-                        selectedBtn={(e) => setAnswerOnQuestion1(e.value)}
+                        selectedBtn={(e) => {
+                            setTimeout(() => {
+                                setAnswerOnQuestion1(e.value)
+                            }, 500)
+                        }}
                         boxDeactiveBgColor={"#E5E5E5"}
                         boxActiveBgColor={"#C2DEEA"}
-                        circleSize={6}
-                        deactiveColor={"#EDBDCD"}
-                        boxStyle={{borderWidth: 0, borderRadius: 0}}
+                        circleSize={3}
+                        deactiveColor={"red"}
+                        boxStyle={{marginTop: 0, borderRadius: 0, borderWidth: 0}}
                     />
                 </View>
             ) : (
@@ -289,13 +303,22 @@ export const ChatBot = () => {
                 </>
             )}
             {!answerOnQuestion2Blur && answerOnQuestion1 && (<TextInput
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: "5%", padding: 5, marginBottom: 10}}
+                style={{
+                    height: 40,
+                    borderColor: '#D4D4D4',
+                    borderWidth: 1,
+                    margin: "5%",
+                    padding: 5,
+                    paddingLeft: 10,
+                    marginBottom: "2%"
+                }}
                 onChangeText={text => setAnswerOnQuestion2(text)}
                 value={answerOnQuestion2}
                 onBlur={() => setAnswerOnQuestion2Blur(true)}
                 placeholderTextColor={"gray"}
                 placeholder={"TEXT"}
                 autoFocus={true}
+                selectionColor={"red"}
             />)}
             {answerOnQuestion2Blur && (
                 <>
@@ -311,22 +334,21 @@ export const ChatBot = () => {
                     </View>
                 </>
             )}
-            {answerOnQuestion2Blur && threeAnswer.length < 2 && (
-                <View>
+            {answerOnQuestion2Blur && !isThreeAnswer && (
+                <View style={{marginBottom: "8%", marginTop: "4%"}}>
                     <SelectMultiple
                         items={answerOneData}
                         selectedItems={threeAnswer}
                         onSelectionsChange={answerThreeChange}
-
+                        onAddItem={onAddItem()}
                         selectedRowStyle={{backgroundColor: "#C2DEEA"}}
-                        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%"}}
+                        rowStyle={{backgroundColor: "#E5E5E5", paddingLeft: "10%", borderBottomWidth: 0}}
                         checkboxStyle={{backgroundColor: "#ECDFCF"}}
                         selectedCheckboxStyle={{backgroundColor: "#C2DEEA"}}
-                        style={{marginTop: "5%"}}
                     />
                 </View>
             )}
-            {threeAnswer.length === 2 && (
+            {isThreeAnswer && (
                 <>
                     <View style={styles.blockAnswerOnQuestion1}>
                         <Text style={styles.answerOnQuestion1}>{transformationValue(threeAnswer)}</Text>
@@ -340,9 +362,9 @@ export const ChatBot = () => {
                     </View>
                 </>
             )}
-            {threeAnswer.length === 2 && !date && (
+            {isThreeAnswer && !date && (
                 <View style={{marginTop: "5%"}}>
-                    <Button title="Show Date Picker" onPress={showDatePicker} />
+                    <Button title="Show Calendar" onPress={showDatePicker}/>
                     <DateTimePickerModal
                         isVisible={isDatePickerVisible}
                         mode="date"
@@ -365,12 +387,22 @@ export const ChatBot = () => {
             </>)
             }
             {!answerOnQuestion5Blur && date && (<TextInput
-                style={{height: 40, borderColor: 'gray', borderWidth: 1, marginTop: 20}}
+                style={{
+                    height: 40,
+                    borderColor: '#D4D4D4',
+                    borderWidth: 1,
+                    margin: "5%",
+                    padding: 5,
+                    paddingLeft: 10,
+                    marginBottom: "2%"
+                }}
                 onChangeText={text => setAnswerOnQuestion5(text)}
                 value={answerOnQuestion5}
                 onBlur={() => setAnswerOnQuestion5Blur(true)}
                 placeholderTextColor={"gray"}
                 placeholder={"Number"}
+                autoFocus={true}
+                selectionColor={"red"}
             />)}
             {answerOnQuestion5Blur && answerOnQuestion5 && (
                 <>
@@ -389,7 +421,7 @@ export const ChatBot = () => {
             {!filePath.uri && answerOnQuestion5Blur && answerOnQuestion5 && (
                 <View>
                     <TouchableOpacity
-                        style={{marginTop: 50, justifyContent: "center", alignItems: "center"}}
+                        style={{marginTop: 50, justifyContent: "center", alignItems: "center", marginBottom: "10%"}}
                         activeOpacity={0.5}
                         onPress={() => chooseFile('photo')}>
                         <IconAntDesign name="upload" size={35} color="#A0A0A0"/>
@@ -397,7 +429,7 @@ export const ChatBot = () => {
                 </View>
             )}
             {answerOnQuestion5Blur && answerOnQuestion5 && filePath.uri && (
-                <View style={{marginBottom: 20}}>
+                <View style={{marginBottom: "12%"}}>
                     <Image source={{uri: filePath.uri}}
                            style={{
                                width: 86,
