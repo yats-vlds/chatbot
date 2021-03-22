@@ -1,18 +1,13 @@
-import React, {useRef} from 'react';
-import {StyleSheet, ScrollView, View} from 'react-native';
-import {ChatBot} from "./src/components/ChatBot";
+import React from 'react';
+import {StyleSheet, View} from 'react-native';
+import {Chatbot} from "./src/components/ChatBot";
+
 
 
 export default function App() {
-    const scrollViewRef = useRef();
     return (
         <View contentContainerStyle={styles.container}>
-            <ScrollView contentContainerStyle={styles.scroll}
-                        ref={scrollViewRef}
-                        onContentSizeChange={() => scrollViewRef.current.scrollToEnd({animated: true})}
-            >
-                <ChatBot/>
-            </ScrollView>
+                <Chatbot/>
         </View>
     );
 }

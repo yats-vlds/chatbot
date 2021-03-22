@@ -2,7 +2,7 @@ import React from "react"
 import {View, Text, StyleSheet} from "react-native";
 import IconSimpleLineIcons from "react-native-vector-icons/SimpleLineIcons"
 
-export const Header = ({refreshHandler}) => {
+export const HeaderChatbot = ({refreshHandler}) => {
     return (
         <View style={styles.header}>
             <View style={styles.leftHeader}>
@@ -16,7 +16,7 @@ export const Header = ({refreshHandler}) => {
                 </Text>
             </View>
             <View style={styles.rightHeader}>
-                <IconSimpleLineIcons name="refresh" size={25} color="#252525" style={{transform: [{rotate: "90deg"}]}} onPress={refreshHandler}/>
+                <IconSimpleLineIcons name="refresh" size={25} color="#252525" style={{transform: [{rotate: "80deg"}]}} onPress={refreshHandler}/>
                 <Text style={styles.subtitleIcon}>refresh</Text>
             </View>
         </View>
@@ -26,12 +26,13 @@ export const Header = ({refreshHandler}) => {
 
 const styles = StyleSheet.create({
     header: {
+        zIndex: 9999,
         height: 70,
         width: "100%",
         backgroundColor: "#47A897",
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "space-between"
     },
     leftHeader: {
         marginLeft: "0%",
